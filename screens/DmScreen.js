@@ -1,36 +1,43 @@
-import { View } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from "react-native";
 import DateSurface from "../components/DateSurface";
 import { useState } from "react";
-// import { SimpleRounded } from "react-native-bubble-chat";
 import ChatSurface from "../components/ChatSurface";
+import ChatInput from "../components/ChatInput";
 
 const DmScreen = () => {
+  const [message, setMessage] = useState([]);
+  const sendMessageHandler = (text, time, isUser) => {
+    setMessage((prev) => [...prev, { text: text, time: time, isUser: true }]);
+  };
+
   return (
-    <View className="flex-1 px-2 bg-primary-100">
-      <DateSurface />
-      <ChatSurface isUser={true}>Hello</ChatSurface>
-      <ChatSurface isUser={true}>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit.ah
-      </ChatSurface>
-      <ChatSurface isUser={true}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est modi
-        nostrum impedit reprehenderit at, repellat quod quas, quo maxime
-        reiciendis quaerat ipsam? Non eos nesciunt dolore excepturi, itaque sit
-        facilis provident similique? Dignissimos quae voluptate eligendi
-        maiores, quaerat numquam optio ab minus, ratione quis, quisquam soluta
-        cum in veniam voluptatum.
-      </ChatSurface>
-      <ChatSurface isUser={false}>Welcome to my channel</ChatSurface>
-      <ChatSurface isUser={false}>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque
-        voluptatem voluptas amet sunt ipsam accusamus iusto, labore temporibus
-        ex tempore? jusjdhjjaokkzklaoajkklaksddjiiandajjojoo
-      </ChatSurface>
-      <DateSurface />
-      <ChatSurface isUser={false}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, ullam.
-      </ChatSurface>
-    </View>
+    <KeyboardAvoidingView className="flex-1" behavior="height">
+      <View className="flex-1 px-2 bg-primary-100">
+        <DateSurface />
+        <FlatList
+          className="flex-1 mb-2"
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          data={message}
+          renderItem={({ item, index }) => (
+            <>
+              <ChatSurface isUser={item.isUser} time={item.time} key={index}>
+                {item.text}
+              </ChatSurface>
+            </>
+          )}
+        />
+        <ChatInput sendHandler={sendMessageHandler} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
