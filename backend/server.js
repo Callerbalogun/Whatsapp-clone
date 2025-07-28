@@ -1,6 +1,6 @@
 const io = require("socket.io")(5000, {
   cors: {
-    origin: ["exp://192.168.1.199:8081"],
+    origin: "*",
   },
 });
 io.on("connection", (socket) => {
