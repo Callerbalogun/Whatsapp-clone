@@ -1,6 +1,6 @@
 import { Image, ScrollView, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import SingleChat from "../components/SingleChat";
+import Channel from "../components/Channel";
 
 const UpdatesScreen = () => {
   return (
@@ -63,7 +63,7 @@ const UpdatesScreen = () => {
           <Icon name="plus" size={24} color={"black"} />
         </View>
         {Array.from({ length: 12 }, (_, index) => (
-          <SingleChat key={index} />
+          <Channel key={index} />
         ))}
       </ScrollView>
     </View>

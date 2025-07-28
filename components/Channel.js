@@ -2,7 +2,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Bagde from "./Bagde";
 
-const SingleChat = ({ pressed, room, lastMessage }) => {
+const Channel = ({ pressed }) => {
   return (
     <Pressable
       className="p-3 flex-row w-screen text-ellipsis"
@@ -21,12 +21,11 @@ const SingleChat = ({ pressed, room, lastMessage }) => {
       </View>
       <View className="w-[85%] py-2">
         <View className="flex-row justify-between">
-          <Text className="text-lg">{room}</Text>
-          <Text>{lastMessage?.time}</Text>
+          <Text className="text-lg">Dummy Channel</Text>
         </View>
         <View className="flex-row pr-2">
           <Text numberOfLines={1} className="flex-1 text-base text-gray-500">
-            {lastMessage?.text || "No messages yet"}
+            No messages yet
           </Text>
           <View className="flex-row pl-2">
             <Icon
@@ -49,4 +48,4 @@ const SingleChat = ({ pressed, room, lastMessage }) => {
   );
 };
 
-export default SingleChat;
+export default Channel;

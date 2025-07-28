@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "WhatsApp clone backend",
+  "keywords": [
+    "null"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "null"
+  },
+  "license": "MIT",
+  "author": "callerbalogun",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "null"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.10",
+    "socket.io": "^4.8.1"
+  }
+}

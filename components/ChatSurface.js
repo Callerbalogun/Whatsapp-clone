@@ -1,10 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Surface } from "react-native-paper";
+import { Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ChatSurface = ({ isUser, time, children }) => {
-  // console.log(children.length);
-
   return (
     <>
       {isUser ? (

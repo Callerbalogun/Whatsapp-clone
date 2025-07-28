@@ -1,68 +1,54 @@
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  View,
-  TouchableWithoutFeedback,
-  Platform,
-  Keyboard,
-} from "react-native";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { FlatList, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useSocket } from "../global/socketContext";
+import { addMessage } from "../global/redux/userSlice";
 import DateSurface from "../components/DateSurface";
-import { useEffect, useState } from "react";
 import ChatSurface from "../components/ChatSurface";
 import ChatInput from "../components/ChatInput";
+import ResponsiveKeyboard from "../components/ResponsiveKeyboard";
 
-const DmScreen = () => {
-  const [message, setMessage] = useState([]);
-  const [flexToggle, setFlexToggle] = useState(false);
-  useEffect(() => {
-    const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
-      setFlexToggle(false);
-    });
+const DmScreen = ({ route }) => {
+  const { room } = route.params;
+  const userId = useSelector((state) => state.user.id);
+  const chat = useSelector((state) =>
+    state.user.chats.find((c) => c.room === room)
+  );
+  const socket = useSocket();
+  const dispatch = useDispatch();
 
-    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
-      setFlexToggle(true);
-    });
-
-    return () => {
-      keyboardShowListener.remove();
-      keyboardHideListener.remove();
+  const sendMessageHandler = (text, time) => {
+    const message = {
+      text,
+      time,
+      senderId: userId,
     };
-  }, []);
 
-  const sendMessageHandler = (text, time, isUser) => {
-    setMessage((prev) => [...prev, { text: text, time: time, isUser: true }]);
+    socket.emit("send", message, room);
+
+    dispatch(addMessage({ room, message: { ...message, isUser: true } }));
   };
 
-  const headerHeight = useHeaderHeight();
-
   return (
-    <KeyboardAvoidingView
-      style={flexToggle ? [{ flexGrow: 1 }] : [{ flex: 1 }]}
-      enabled={!flexToggle}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : headerHeight}
-    >
-      <TouchableWithoutFeedback>
-        <View className="flex-1 px-2 bg-primary-100">
-          <DateSurface />
-          <FlatList
-            className="flex-1 mb-2"
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={message}
-            renderItem={({ item, index }) => (
-              <>
-                <ChatSurface isUser={item.isUser} time={item.time} key={index}>
-                  {item.text}
-                </ChatSurface>
-              </>
-            )}
-          />
-          <ChatInput sendHandler={sendMessageHandler} />
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    <ResponsiveKeyboard>
+      <View className="flex-1 px-2 bg-primary-100">
+        <DateSurface />
+        <FlatList
+          style={{ flex: 1, marginBottom: 8 }}
+          showsVerticalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
+          data={chat.message}
+          keyExtractor={(_, idx) => idx.toString()}
+          renderItem={({ item }) => (
+            <>
+              <ChatSurface isUser={item.isUser} time={item.time}>
+                {item.text}
+              </ChatSurface>
+            </>
+          )}
+        />
+        <ChatInput sendHandler={sendMessageHandler} />
+      </View>
+    </ResponsiveKeyboard>
   );
 };
 
