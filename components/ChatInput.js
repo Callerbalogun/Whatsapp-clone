@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { TextInput, View } from "react-native";
+import { colors } from "../assets/colors";
 import dayjs from "dayjs";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors } from "../assets/colors";
 
 const ChatInput = ({ sendHandler }) => {
   const [inputText, setInputText] = useState("");
